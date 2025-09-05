@@ -1,0 +1,10 @@
+{
+  "name": "Street Racing",
+  "description": "Arcade racing with traffic and drift scoring.",
+  "players": "1-12",
+  "mapStyle": "coastal-city",
+  "modes": [
+    "Sprint",
+    "Circuit"
+  ]
+}

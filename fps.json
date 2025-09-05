@@ -1,0 +1,10 @@
+{
+  "name": "Tactical FPS",
+  "description": "Arena shooter with bots and checkpoints.",
+  "players": "1-32",
+  "mapStyle": "industrial-yard",
+  "modes": [
+    "TDM",
+    "FFA"
+  ]
+}

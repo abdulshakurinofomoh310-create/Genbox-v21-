@@ -1,0 +1,10 @@
+{
+  "name": "Wrestling Arena",
+  "description": "Ring combat with grapples and stamina.",
+  "players": "1-4",
+  "arena": "Genbox Dome",
+  "modes": [
+    "1v1",
+    "Tag Team"
+  ]
+}

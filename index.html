@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Genbox – AAA Metaverse Demo</title>
+  <style>
+    :root {
+      --bg: #0b0f14; --panel: #121821; --muted: #9bb0c3; --acc: #6ae3ff; --ok:#16c784; --warn:#ffb020;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto; background: radial-gradient(1200px 600px at 70% -10%, #102133 0%, #0b0f14 60%); color:#dbe7f3;}
+    header { padding:20px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between; border-bottom:1px solid #1e2a3a; position:sticky; top:0; background:rgba(11,15,20,0.8); backdrop-filter: blur(8px); }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .logo { width:36px; height:36px; border-radius:10px; background: linear-gradient(135deg, #6ae3ff, #7b61ff); box-shadow: 0 0 24px rgba(122,153,255,.4) inset; }
+    .title { font-weight:800; letter-spacing:.3px; }
+    .subtitle { color:var(--muted); font-size:14px;}
+    .shell { display:grid; grid-template-columns: 340px 1fr; gap:16px; padding:16px; }
+    .card { background: linear-gradient(180deg, rgba(18,24,33,.7), rgba(18,24,33,.4)); border:1px solid #1b2737; border-radius:16px; box-shadow: 0 8px 30px rgba(0,0,0,.25); overflow:hidden; }
+    .card h3 { margin:0; padding:14px 16px; border-bottom:1px solid #1b2737; background: rgba(10,15,22,.5); }
+    .pad { padding:14px 16px; }
+    .muted { color: var(--muted); }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .btn { padding:10px 12px; border:1px solid #28384f; border-radius:12px; background:#122031; color:#dbe7f3; cursor:pointer; font-weight:600; }
+    .btn:hover { border-color:#365274; transform: translateY(-1px); }
+    .btn.acc { background: linear-gradient(135deg, #6ae3ff22, #7b61ff22); border-color:#405b8a; }
+    .select { width:100%; padding:12px; border-radius:12px; border:1px solid #25354a; background:#0f1b2a; color:#e5f0ff; }
+    .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+    footer { padding:16px; text-align:center; color:#8ca4ba;}
+    canvas { width:100%; height:500px; background:#03060b; border-bottom-left-radius:16px; border-bottom-right-radius:16px;}
+    .status { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
+    .pill { padding:6px 10px; border-radius:999px; border:1px solid #26415f; background:#0e2236; font-size:12px; color:#a9c7e5;}
+    .ok { color:#b0f9c6; border-color:#165c3e; background:#0c2a20;}
+    .warn { color:#ffe0a3; border-color:#5f4e16; background:#2a220c;}
+    a.cta { color:#0bd0ff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <div class="title">GENBOX</div>
+        <div class="subtitle">AAA Metaverse Creation – Instant Templates & Play</div>
+      </div>
+    </div>
+    <div class="status">
+      <span class="pill">Web demo</span>
+      <span class="pill ok">Mobile + Desktop</span>
+      <a class="cta" href="./Genbox_Pitch.pdf" target="_blank">Pitch PDF →</a>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="card">
+      <h3>Templates</h3>
+      <div class="pad">
+        <p class="muted">Pick a template and press <b>Play</b>. You can tweak core parameters first.</p>
+        <label>Template</label>
+        <select id="template" class="select">
+          <option value="fps">FPS Tactical</option>
+          <option value="racing">Street Racing</option>
+          <option value="football">Football 11v11</option>
+          <option value="wrestling">Wrestling Arena</option>
+          <option value="rpg">Fantasy RPG</option>
+        </select>
+        <div style="height:10px"></div>
+        <div class="grid">
+          <div>
+            <label>World Seed</label>
+            <input id="seed" class="select" value="Lagos-Night"/>
+          </div>
+          <div>
+            <label>NPC Count</label>
+            <input id="npcs" type="number" class="select" value="12" min="0" max="200"/>
+          </div>
+        </div>
+        <div style="height:10px"></div>
+        <div class="row">
+          <button id="playBtn" class="btn acc">▶ Play</button>
+          <button id="photoBtn" class="btn">📸 Photo Mode</button>
+          <button id="resetBtn" class="btn">⟲ Reset</button>
+        </div>
+        <div style="height:10px"></div>
+        <div class="muted" id="desc">Ready.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Preview</h3>
+      <canvas id="view" width="1280" height="720"></canvas>
+    </div>
+
+    <div class="card">
+      <h3>Quick Facts</h3>
+      <div class="pad">
+        <div class="row">
+          <span class="pill">Photoreal presets</span>
+          <span class="pill">AI WorldGen</span>
+          <span class="pill">NPC Behaviors</span>
+          <span class="pill">Physics</span>
+          <span class="pill">Controller + Touch</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Controls</h3>
+      <div class="pad">
+        <p class="muted">
+          Desktop: <b>WASD</b> / <b>Arrow Keys</b> to move, <b>Space</b> to jump/boost. <b>Mouse</b> to aim (FPS).<br/>
+          Mobile: On-screen joystick (auto) + tap buttons.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer>© Genbox Demo – For pitch & evaluation only.</footer>
+
+  <script>
+    const canvas = document.getElementById('view');
+    const ctx = canvas.getContext('2d');
+    const templateEl = document.getElementById('template');
+    const seedEl = document.getElementById('seed');
+    const npcsEl = document.getElementById('npcs');
+    const descEl = document.getElementById('desc');
+
+    let state = { mode:'idle', t:0, keys:{}, npcs:[], player:{x:200,y:300,vx:0,vy:0}, camera:{x:0,y:0}, photo:false };
+
+    function rand(seed){
+      let s = 0;
+      for (let i=0;i<seed.length;i++) s = (s*31 + seed.charCodeAt(i)) % 65536;
+      return ()=> (s = (1103515245*s + 12345) % 2147483648)/2147483648;
+    }
+
+    function reset(){
+      state.mode = templateEl.value;
+      state.t=0; state.npcs=[]; state.photo=false;
+      const R = rand(seedEl.value);
+      const npcCount = Math.max(0, Math.min(200, parseInt(npcsEl.value||"0",10)));
+      for (let i=0;i<npcCount;i++){
+        state.npcs.push({x: R()*2000-1000, y:R()*1200-600, vx:R()*2-1, vy:R()*2-1, c:`hsl(${(R()*360)|0},70%,60%)`});
+      }
+      state.player = {x:0,y:0,vx:0,vy:0,ang:0,speed:3, drift:0};
+      descEl.textContent = `Template: ${templateEl.value.toUpperCase()} • Seed: ${seedEl.value} • NPCs: ${npcCount}`;
+    }
+
+    function drawGrid(){
+      ctx.save();
+      ctx.translate(canvas.width/2 - state.player.x, canvas.height/2 - state.player.y);
+      ctx.strokeStyle = '#0e2a44';
+      ctx.lineWidth = 1;
+      for(let x=-2000;x<=2000;x+=100){
+        ctx.beginPath(); ctx.moveTo(x,-1200); ctx.lineTo(x,1200); ctx.stroke();
+      }
+      for(let y=-1200;y<=1200;y+=100){
+        ctx.beginPath(); ctx.moveTo(-2000,y); ctx.lineTo(2000,y); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function drawCity(){
+      ctx.save();
+      ctx.translate(canvas.width/2 - state.player.x, canvas.height/2 - state.player.y);
+      const roads = 12;
+      for(let i=-roads;i<=roads;i++){
+        ctx.fillStyle = i%3===0 ? '#0b1b28' : '#091521';
+        ctx.fillRect(i*180-90, -1200, 120, 2400);
+      }
+      ctx.restore();
+    }
+
+    function drawNPCs(){
+      ctx.save();
+      ctx.translate(canvas.width/2 - state.player.x, canvas.height/2 - state.player.y);
+      for(const n of state.npcs){
+        ctx.fillStyle = n.c;
+        ctx.beginPath(); ctx.arc(n.x, n.y, 10, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function updateNPCs(){
+      for(const n of state.npcs){
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<-1100||n.x>1100) n.vx*=-1;
+        if (n.y<-700||n.y>700) n.vy*=-1;
+      }
+    }
+
+    // Input
+    const keys = state.keys;
+    window.addEventListener('keydown', e=> keys[e.key]=true);
+    window.addEventListener('keyup', e=> keys[e.key]=false);
+
+    // Render loop
+    function step(){
+      state.t += 1/60;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // Sky & fog
+      const g = ctx.createLinearGradient(0,0,0,canvas.height);
+      g.addColorStop(0, '#07101a');
+      g.addColorStop(1, '#0b1520');
+      ctx.fillStyle = g; ctx.fillRect(0,0,canvas.width, canvas.height);
+
+      drawGrid();
+
+      // Player control by template
+      if (state.mode==='fps'){
+        state.player.speed = 3.2;
+        if (keys['w']||keys['ArrowUp']) state.player.y -= state.player.speed;
+        if (keys['s']||keys['ArrowDown']) state.player.y += state.player.speed;
+        if (keys['a']||keys['ArrowLeft']) state.player.x -= state.player.speed;
+        if (keys['d']||keys['ArrowRight']) state.player.x += state.player.speed;
+
+        // crosshair
+        ctx.strokeStyle = '#6ae3ff'; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(canvas.width/2-10, canvas.height/2); ctx.lineTo(canvas.width/2+10, canvas.height/2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(canvas.width/2, canvas.height/2-10); ctx.lineTo(canvas.width/2, canvas.height/2+10); ctx.stroke();
+
+        drawCity();
+      }
+
+      if (state.mode==='racing'){
+        state.player.speed = 0.98*state.player.speed + (keys['w']||keys['ArrowUp'] ? 0.06 : -0.02);
+        state.player.speed = Math.max(0, Math.min(6, state.player.speed));
+        if (keys['a']||keys['ArrowLeft']) state.player.ang -= 0.05*(0.5+state.player.speed/6);
+        if (keys['d']||keys['ArrowRight']) state.player.ang += 0.05*(0.5+state.player.speed/6);
+        state.player.x += Math.cos(state.player.ang)*state.player.speed*4;
+        state.player.y += Math.sin(state.player.ang)*state.player.speed*4;
+        drawCity();
+
+        // car
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.rotate(state.player.ang);
+        ctx.fillStyle = '#6ae3ff33'; ctx.fillRect(-30,-15,60,30);
+        ctx.strokeStyle = '#6ae3ff'; ctx.strokeRect(-30,-15,60,30);
+        ctx.restore();
+      }
+
+      if (state.mode==='football'){
+        drawCity();
+        // simple ball/player
+        const r = 14;
+        state.ball = state.ball || {x: state.player.x, y: state.player.y, vx:2, vy:1.4};
+        if (keys['w']||keys['ArrowUp']) state.player.y -= 3;
+        if (keys['s']||keys['ArrowDown']) state.player.y += 3;
+        if (keys['a']||keys['ArrowLeft']) state.player.x -= 3;
+        if (keys['d']||keys['ArrowRight']) state.player.x += 3;
+        // kick
+        const dx = state.ball.x - state.player.x, dy = state.ball.y - state.player.y;
+        const dist = Math.hypot(dx,dy);
+        if (dist<30 && (keys[' ']||keys['Enter'])) { state.ball.vx = dx; state.ball.vy = dy; }
+        state.ball.x += state.ball.vx*0.1; state.ball.y += state.ball.vy*0.1;
+        state.ball.vx *= 0.99; state.ball.vy *= 0.99;
+
+        ctx.fillStyle = '#00ffa855'; ctx.fillRect(canvas.width/2-300, canvas.height/2-200, 600, 400);
+        // ball
+        ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(canvas.width/2-(state.player.x-state.ball.x), canvas.height/2-(state.player.y-state.ball.y), r, 0, Math.PI*2); ctx.fill();
+        // player
+        ctx.fillStyle='#ff6ad6'; ctx.beginPath(); ctx.arc(canvas.width/2, canvas.height/2, 16, 0, Math.PI*2); ctx.fill();
+      }
+
+      if (state.mode==='wrestling'){
+        // ring
+        ctx.fillStyle = '#101622'; ctx.fillRect(canvas.width/2-260, canvas.height/2-180, 520, 360);
+        ctx.strokeStyle = '#6ae3ff'; ctx.lineWidth=3; ctx.strokeRect(canvas.width/2-260, canvas.height/2-180, 520, 360);
+        // player move
+        if (keys['a']||keys['ArrowLeft']) state.player.x -= 3;
+        if (keys['d']||keys['ArrowRight']) state.player.x += 3;
+        if (keys['w']||keys['ArrowUp']) state.player.y -= 3;
+        if (keys['s']||keys['ArrowDown']) state.player.y += 3;
+        // clamp
+        state.player.x = Math.max(-200, Math.min(200, state.player.x));
+        state.player.y = Math.max(-120, Math.min(120, state.player.y));
+        // draw players
+        function drawChar(x,y,c){ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(canvas.width/2+x, canvas.height/2+y, 18,0,Math.PI*2); ctx.fill(); }
+        drawChar(state.player.x, state.player.y, '#ff9f6a');
+        const opp = {x: Math.sin(state.t)*150, y: Math.cos(state.t*0.7)*80};
+        drawChar(opp.x, opp.y, '#6ab8ff');
+      }
+
+      if (state.mode==='rpg'){
+        // tile map
+        const size = 40;
+        for (let y=0;y<canvas.height/size+2;y++){
+          for (let x=0;x<canvas.width/size+2;x++){
+            const v = ((x + y + Math.floor(state.t)) % 2);
+            ctx.fillStyle = v ? '#0f1f2e' : '#0c1924';
+            ctx.fillRect(x*size, y*size, size, size);
+          }
+        }
+        if (keys['a']||keys['ArrowLeft']) state.player.x -= 3;
+        if (keys['d']||keys['ArrowRight']) state.player.x += 3;
+        if (keys['w']||keys['ArrowUp']) state.player.y -= 3;
+        if (keys['s']||keys['ArrowDown']) state.player.y += 3;
+        ctx.fillStyle='#ffd86a'; ctx.beginPath(); ctx.arc(canvas.width/2, canvas.height/2, 14,0,Math.PI*2); ctx.fill();
+      }
+
+      updateNPCs();
+      drawNPCs();
+
+      // Photo mode overlay
+      if (state.photo){
+        ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.strokeStyle = '#6ae3ff88'; ctx.lineWidth=2;
+        ctx.strokeRect(40,40,canvas.width-80, canvas.height-80);
+      }
+
+      requestAnimationFrame(step);
+    }
+    step();
+
+    // Buttons
+    document.getElementById('playBtn').onclick = ()=> reset();
+    document.getElementById('resetBtn').onclick = ()=> reset();
+    document.getElementById('photoBtn').onclick = ()=> { state.photo = !state.photo; };
+
+    // Init
+    reset();
+  </script>
+</body>
+</html>

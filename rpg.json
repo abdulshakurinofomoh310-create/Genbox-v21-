@@ -1,0 +1,9 @@
+{
+  "name": "Fantasy RPG",
+  "description": "Questing, inventory, simple combat loop.",
+  "players": "1-4",
+  "world": "Forest Outskirts",
+  "modes": [
+    "Adventure"
+  ]
+}

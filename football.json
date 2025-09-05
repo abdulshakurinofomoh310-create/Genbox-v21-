@@ -1,0 +1,10 @@
+{
+  "name": "Football 11v11",
+  "description": "Arcade football with AI teammates and goalie.",
+  "players": "1-22",
+  "stadium": "Night Arena",
+  "modes": [
+    "Kickoff",
+    "Practice"
+  ]
+}
